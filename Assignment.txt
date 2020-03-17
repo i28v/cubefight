@@ -1,0 +1,9 @@
+This is an assignment for TechTrep where I make a c++ game while explaining how it was made.
+
+The game will be like this:
+
+.1 You play as a cube
+.2 Enemy cubes spawn at the sides of the game and attack You
+.3 You have to shoot the cubes and you will earn score from it 
+
+Open up the .cpp and .h files for the documentation
