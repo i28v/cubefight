@@ -9,6 +9,7 @@
 
 #include "data.h"
 
+
 class Bullet
 {
 public:

@@ -9,6 +9,9 @@
 
 #include "data.h"
 #include "Bullet.h"
+#include "Enemy.h"
+
+class Enemy;
 
 class Player
 {
@@ -19,6 +22,7 @@ public:
     void update();
     void move(float x, float y);
     void fire(uint8_t direction);
+    void checkCollision(Enemy& targetEnemy, bool& targetBool);
     void setHealth(int8_t value);
     void addHealth(int8_t value);
     void subHealth(int8_t value);
@@ -35,7 +39,6 @@ public:
     uint16_t numberOfBulletsBeingFired;
     float getPositionX();
     float getPositionY();
-    float moveSpeed;
     std::vector<Bullet*> playerBullets;
 private:
     RectangleShape* rect;

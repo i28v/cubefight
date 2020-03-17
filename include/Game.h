@@ -9,6 +9,7 @@
 
 #include "data.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Lehmer.h"
 
 class Game 
@@ -21,6 +22,9 @@ private:
     RenderWindow* gameWindow;
     Event* gameEventHandler;
     Player* gamePlayer;
+    std::vector<Enemy*> gameEnemies;
+    Clock spawnEnemiesClock;
+    Time spawnEnemiesTime;
     void init();
     void cleanUp();
     void mainGameLoop();
@@ -28,9 +32,11 @@ private:
     void handleInput();
     void updateObjects();
     void drawToScreen(RenderWindow& targetRenderWindow);
+    void spawnEnemy(float positionX, float positionY);
+    uint16_t spawnRate;
+    uint16_t numberOfEnemies;
     bool gameOver;
     bool gamePaused;
-
 };
 
 #endif /* GAME_INCLUDED */

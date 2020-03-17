@@ -38,6 +38,7 @@ void Game::init()
     gameWindow->setFramerateLimit(60); /* The human eye can't really notice framerates higher than 60 frames per second, so let's just set the limit to that so the CPU can run more efficently */
     gamePlayer = new Player(350, 300, 20, 20, Color::Blue);
     gameOver = false;
+    spawnEnemiesClock.restart();
 }
 
 /*
@@ -120,7 +121,62 @@ void Game::handleInput()
 
 void Game::updateObjects()
 {
+    spawnEnemiesTime = spawnEnemiesClock.getElapsedTime();
     gamePlayer->update();
+    float pPosX = gamePlayer->getPositionX();
+    float pPosY = gamePlayer->getPositionY();
+    if(numberOfEnemies > 0)
+    {
+       for(int i = 0; i < gameEnemies.size(); i++)
+       {
+           gameEnemies[i]->update(&pPosX, &pPosY);
+           gamePlayer->checkCollision(*(gameEnemies[i]), gameOver);
+           if(gamePlayer->numberOfBulletsBeingFired > 0)
+           {
+               for(int j = 0; j < gamePlayer->playerBullets.size(); j++)
+               {
+                   if(gamePlayer->playerBullets[j]->getHitbox().intersects(gameEnemies[i]->getHitbox()))
+                   {
+                       
+                       Enemy* tmp = gameEnemies[i];
+                       gameEnemies.erase(gameEnemies.begin() + i);
+                       delete(tmp);
+                       numberOfEnemies--;
+                       Bullet* tmp2 = gamePlayer->playerBullets[j];
+                       gamePlayer->playerBullets.erase(gamePlayer->playerBullets.begin() + j);
+                       delete(tmp2);
+                       gamePlayer->numberOfBulletsBeingFired--;
+                   }
+               }
+           }
+       }
+    }
+    if(spawnEnemiesTime.asSeconds() > 5)
+    {
+        spawnEnemiesClock.restart();
+        spawnRate++;
+        for(int i = 0; i < spawnRate; i++)
+        {
+            int sideToSpawn = Lehmer32() % 4 + 1;
+            switch(sideToSpawn)
+            {
+                case 1:
+                    spawnEnemy(static_cast<float>(Lehmer32() % 800), 0);
+                    break;
+                case 2:
+                    spawnEnemy(static_cast<float>(Lehmer32() % 800), 600);
+                    break;
+                case 3:
+                    spawnEnemy(0, static_cast<float>(Lehmer32() % 600));
+                    break;
+                case 4:
+                    spawnEnemy(800, static_cast<float>(Lehmer32() % 600));
+                    break;
+                default:
+                    break;   
+            }
+        }
+    }
 }
 
 /*
@@ -131,7 +187,24 @@ void Game::drawToScreen(RenderWindow& targetRenderWindow)
 {
     targetRenderWindow.clear(Color::White);
     gamePlayer->drawTo(targetRenderWindow);
+    if(numberOfEnemies > 0)
+    {
+        for(int i = 0; i < gameEnemies.size(); i++)
+        {
+            gameEnemies[i]->drawTo(targetRenderWindow);
+        }
+    }
     targetRenderWindow.display();
+}
+
+/*
+    This spawns enemies in the map
+*/ 
+
+void Game::spawnEnemy(float x, float y)
+{
+    gameEnemies.push_back(new Enemy(x, y, 20, 20, Color::Red));
+    numberOfEnemies++;
 }
 
 /*
@@ -157,4 +230,6 @@ void Game::start()
 {
     init();
     mainGameLoop();
+    delete this;
+    exit(0);
 }

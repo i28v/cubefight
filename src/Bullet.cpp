@@ -12,7 +12,7 @@ Bullet::Bullet(float positionX, float positionY, float sizeX, float sizeY, Color
     rect->setPosition(positionX, positionY);
     rect->setSize({sizeX, sizeY});
     rect->setFillColor(color);
-    speed = 15;
+    speed = 10;
 }
 
 Bullet::~Bullet()

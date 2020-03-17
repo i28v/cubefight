@@ -13,7 +13,6 @@ Player::Player(float positionX, float positionY, float sizeX, float sizeY, Color
     rect->setPosition(positionX, positionY);
     rect->setSize({sizeX, sizeY});
     rect->setFillColor(color);
-    moveSpeed = 2.0f;
     fireBulletsClock.restart();
 }
 
@@ -43,25 +42,25 @@ void Player::update()
         case 1: /* Up  */
             if(getPositionY() > 0)
             {
-                move(0.0f, -moveSpeed);
+                move(0.0f, -3.0f);
             }
             break;
         case 2: /* Down */
             if(getPositionY() < (600 - 20)) 
             {
-                move(0.0f, moveSpeed);
+                move(0.0f, 3.0f);
             }
             break;
         case 3: /* Left */
             if(getPositionX() > 0)
             {
-                move(-moveSpeed, 0.0f);
+                move(-3.0f, 0.0f);
             }
             break;
         case 4: /* Right */
             if(getPositionX() < 780)
             {
-                move(moveSpeed, 0.0f);
+                move(3.0f, 0.0f);
             }
             break;
         case 5: /* Still (not moving) */
@@ -69,7 +68,7 @@ void Player::update()
         default:
             break;
     }
-    if(fireBulletsTime.asMilliseconds() > 250)
+    if(fireBulletsTime.asMilliseconds() > 300)
     {
         fireBulletsClock.restart();
         if(getFireDirection() != 5)
@@ -122,22 +121,22 @@ void Player::fire(uint8_t direction)
     switch(direction)
     {
        case 1:  
-            playerBullets.push_back(new Bullet(getPositionX() + 5, getPositionY() - 5, 5, 15, Color::Yellow));
+            playerBullets.push_back(new Bullet(getPositionX() + 7, getPositionY() - 7, 5, 10, Color::Yellow));
             playerBullets[numberOfBulletsBeingFired]->setDirection(1);
             numberOfBulletsBeingFired++;
             break;
        case 2:
-            playerBullets.push_back(new Bullet(getPositionX() + 5, getPositionY() + 5, 5, 15, Color::Yellow));
+            playerBullets.push_back(new Bullet(getPositionX() + 7, getPositionY() + 7, 5, 10, Color::Yellow));
             playerBullets[numberOfBulletsBeingFired]->setDirection(2);
             numberOfBulletsBeingFired++;
             break;  
        case 3:
-            playerBullets.push_back(new Bullet(getPositionX() - 5, getPositionY() + 5, 15, 5, Color::Yellow));
+            playerBullets.push_back(new Bullet(getPositionX() - 7, getPositionY() + 7, 10, 5, Color::Yellow));
             playerBullets[numberOfBulletsBeingFired]->setDirection(3);
             numberOfBulletsBeingFired++;
             break;
        case 4:
-            playerBullets.push_back(new Bullet(getPositionX() + 5, getPositionY() + 5, 15, 5, Color::Yellow));
+            playerBullets.push_back(new Bullet(getPositionX() + 7, getPositionY() + 7, 10, 5, Color::Yellow));
             playerBullets[numberOfBulletsBeingFired]->setDirection(4);
             numberOfBulletsBeingFired++;
             break;
@@ -145,6 +144,14 @@ void Player::fire(uint8_t direction)
             break;
        default:
             break; 
+    }
+}
+
+void Player::checkCollision(Enemy& targetEnemy, bool& targetBool)
+{
+    if(getHitbox().intersects(targetEnemy.getHitbox()))
+    {
+        targetBool = true;
     }
 }
 
