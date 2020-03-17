@@ -8,8 +8,6 @@
 #define DATA_INCLUDED
 
 #include <SFML/Graphics.hpp>
-#include <stdio.h>
-#include <iostream>
 #include <vector>
 #include <stdint.h>
 #include <stdlib.h>

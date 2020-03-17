@@ -8,7 +8,7 @@
 
 int main(int argc, char* argv[])
 {
-    Game* mainGame = new Game();
+    Game* mainGame = new Game;
     mainGame->start();
     return 0;
 }

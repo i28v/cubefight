@@ -24,6 +24,14 @@ Game::~Game()
     delete gameWindow;
     delete gameEventHandler;
     delete gamePlayer;
+    if(numberOfEnemies > 0) 
+    {
+        for(int i = 0; i < gameEnemies.size(); i++)
+        {
+            Enemy* tmp = gameEnemies[i];
+            delete(tmp);
+        }
+    }
 }
 
 /* 
@@ -38,6 +46,7 @@ void Game::init()
     gameWindow->setFramerateLimit(60); /* The human eye can't really notice framerates higher than 60 frames per second, so let's just set the limit to that so the CPU can run more efficently */
     gamePlayer = new Player(350, 300, 20, 20, Color::Blue);
     gameOver = false;
+    spawnRate = 1;
     spawnEnemiesClock.restart();
 }
 

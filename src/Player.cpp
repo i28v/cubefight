@@ -18,7 +18,6 @@ Player::Player(float positionX, float positionY, float sizeX, float sizeY, Color
 
 Player::~Player()
 {
-    printf("Player deleted \n");
     delete rect;
 }
 
@@ -100,7 +99,6 @@ void Player::update()
         {
             if(playerBullets[i]->getPositionX() < 0 || playerBullets[i]->getPositionX() > 800 || playerBullets[i]->getPositionY() < 0 || playerBullets[i]->getPositionY() > 600)
             {
-                std::cout << numberOfBulletsBeingFired << std::endl;
                 numberOfBulletsBeingFired--;
                 Bullet* tmp = playerBullets[i];
                 playerBullets.erase(playerBullets.begin() + i);
